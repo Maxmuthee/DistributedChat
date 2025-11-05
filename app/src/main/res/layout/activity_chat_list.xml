@@ -1,25 +1,64 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp"
+    android:background="#F8F9FA">
+
+    <!-- App Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VybzChat"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="#2196F3"
+        android:layout_marginBottom="48dp" />
+
+    <!-- Welcome Message -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Global Chat"
+        android:textSize="18sp"
+        android:textColor="#666666"
+        android:layout_marginBottom="48dp"
+        android:gravity="center" />
+
+    <!-- Open Chat Button -->
+    <Button
+        android:id="@+id/btnOpenChat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="56dp"
+        android:text="Open Global Chat"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="#2196F3"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Sign Out Button -->
+    <Button
+        android:id="@+id/btnSignOut"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Sign Out"
+        android:textSize="16sp"
+        android:background="#FFFFFF"
+        android:textColor="#666666"
+        android:layout_marginBottom="16dp" />
+
+    <!-- User Info (Optional) -->
+    <TextView
+        android:id="@+id/tvUserInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:gravity="center"
-        android:padding="16dp"
-        android:background="#FFFFFF">
+        android:text="Connected Vyber"
+        android:textColor="#999999"
+        android:textSize="12sp" />
 
-        <Button
-            android:id="@+id/btnOpenChat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Open Global Chat"
-            android:layout_marginBottom="16dp"
-            android:padding="12dp"/>
-
-        <Button
-            android:id="@+id/btnSignOut"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sign Out"
-            android:padding="12dp"/>
-    </LinearLayout>
-</layout>
+</LinearLayout>

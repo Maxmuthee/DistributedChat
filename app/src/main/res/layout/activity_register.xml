@@ -2,36 +2,86 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="24dp"
+    android:padding="32dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    android:gravity="center"
     tools:context=".ui.auth.RegisterActivity">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#2196F3"
+        android:layout_marginBottom="48dp" />
+
+    <!-- Username Field -->
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:hint="Username"
         android:inputType="textPersonName"
-        android:padding="12dp"
-        android:layout_marginBottom="12dp" />
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:textSize="16sp"
+        android:drawablePadding="12dp"
+        android:drawableStart="@android:drawable/ic_menu_edit" />
 
+    <!-- Email Field -->
     <EditText
         android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:textSize="16sp"
+        android:drawablePadding="12dp"
+        android:drawableStart="@android:drawable/ic_dialog_email" />
 
+    <!-- Password Field -->
     <EditText
         android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
         android:hint="Password"
         android:inputType="textPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:padding="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:textSize="16sp"
+        android:drawablePadding="12dp"
+        android:drawableStart="@android:drawable/ic_lock_lock" />
 
+    <!-- Register Button -->
     <Button
         android:id="@+id/btnRegister"
-        android:text="Register"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="56dp"
+        android:text="Create Account"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="#2196F3"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Login Link - ADD THE ID HERE -->
+    <TextView
+        android:id="@+id/tvLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Already have an account? Sign in"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:textColor="#666666"
+        android:padding="16dp" />
+
 </LinearLayout>

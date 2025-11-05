@@ -1,5 +1,6 @@
 package com.example.vybzchat.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +39,15 @@ class MessageAdapter(private val messageList: List<Message>) :
         } ?: ""
 
         with(holder.binding) {
+            // SET BLACK TEXT COLORS FOR ALL TEXT VIEWS
+            textSent.setTextColor(Color.BLACK)
+            textSenderNameSent.setTextColor(Color.BLACK)
+            tvTimeSent.setTextColor(Color.parseColor("#666666"))
+
+            textReceived.setTextColor(Color.BLACK)
+            textSenderNameReceived.setTextColor(Color.BLACK)
+            tvTimeReceived.setTextColor(Color.parseColor("#666666"))
+
             if (message.senderId == currentUserId) {
                 // Show message on the right (sent)
                 layoutSent.visibility = android.view.View.VISIBLE

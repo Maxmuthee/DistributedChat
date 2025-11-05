@@ -1,32 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/bg_chat_gradient"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#F8F9FA"
     tools:context=".ChatActivity">
 
-    <!-- Typing indicator -->
-    <TextView
-        android:id="@+id/tvTyping"
+    <!-- App Bar -->
+    <LinearLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="Someone is typing..."
-        android:textColor="@android:color/darker_gray"
-        android:textSize="14sp"
-        android:layout_above="@+id/inputLayout"
-        android:visibility="gone"/>
+        android:layout_height="56dp"
+        android:background="#2196F3"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:text="←"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:padding="8dp" />
+
+        <!-- Chat Title -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Global Chat"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <!-- Online Indicator -->
+        <TextView
+            android:id="@+id/tvOnlineStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Online"
+            android:textColor="#E3F2FD"
+            android:textSize="12sp" />
+
+    </LinearLayout>
 
     <!-- RecyclerView for messages -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMessages"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/appBar"
+        android:layout_above="@+id/inputLayout"
         android:padding="8dp"
         android:scrollbars="vertical"
-        android:layout_above="@+id/inputLayout"/>
+        android:clipToPadding="false" />
 
     <!-- Message input section -->
     <LinearLayout
@@ -34,33 +69,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"> <!-- Adjust distance from bottom -->
+        android:padding="16dp"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:layout_alignParentBottom="true">
 
         <ImageButton
             android:id="@+id/btnImage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="#2196F3"
+            android:src="@android:drawable/ic_menu_camera"
             android:contentDescription="Send image"
-            android:src="@android:drawable/ic_menu_camera" />
+            android:layout_gravity="center_vertical"
+            android:padding="12dp"
+            android:tint="#FFFFFF" />
 
         <EditText
             android:id="@+id/etMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Type a message"
+            android:hint="Type a message..."
             android:inputType="textCapSentences|textMultiLine"
             android:maxLines="4"
-            android:padding="8dp" />
+            android:padding="16dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:textSize="16sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="center_vertical" />
 
         <Button
             android:id="@+id/btnSend"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send" />
+            android:layout_height="48dp"
+            android:text="Send"
+            android:textStyle="bold"
+            android:background="#2196F3"
+            android:textColor="#FFFFFF"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:layout_gravity="center_vertical" />
+
     </LinearLayout>
 
 </RelativeLayout>

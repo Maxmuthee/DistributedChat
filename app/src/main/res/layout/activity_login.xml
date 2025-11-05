@@ -1,33 +1,69 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="32dp"
+    android:background="#F8F9FA"
+    android:gravity="center">
+
+    <!-- Welcome Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome Back"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#2196F3"
+        android:layout_marginBottom="48dp" />
+
+    <!-- Email Input -->
+    <EditText
+        android:id="@+id/etEmail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_height="56dp"
+        android:hint="Email address"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="16dp"
+        android:drawablePadding="12dp"
+        android:drawableStart="@android:drawable/ic_dialog_email" />
 
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"/>
+    <!-- Password Input -->
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="32dp"
+        android:drawablePadding="12dp"
+        android:drawableStart="@android:drawable/ic_lock_lock" />
 
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:inputType="textPassword"/>
+    <!-- Login Button -->
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Login"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="#2196F3"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="16dp" />
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Login"/>
+    <!-- Register Link -->
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Don't have an account? Create account"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:textColor="#666666"
+        android:padding="16dp" />
 
-        <TextView
-            android:id="@+id/tvRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Create account"/>
-    </LinearLayout>
-</layout>
+</LinearLayout>
