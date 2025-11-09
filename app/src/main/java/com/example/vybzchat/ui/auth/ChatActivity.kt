@@ -2,6 +2,7 @@ package com.example.vybzchat.ui.auth
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +11,11 @@ import com.example.vybzchat.adapter.MessageAdapter
 import com.example.vybzchat.databinding.ActivityChatBinding
 import com.example.vybzchat.model.Message
 import com.example.vybzchat.utils.FirebaseHelper
+import com.example.vybzchat.utils.ImageUploader
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding
@@ -18,6 +23,8 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatId: String
     private var messagesListener: ListenerRegistration? = null
     private val PICK_IMAGE = 1234
+
+    private lateinit var imageUploader: ImageUploader
 
     private val messageList = mutableListOf<Message>()
     private var currentUserName: String? = null
@@ -28,6 +35,7 @@ class ChatActivity : AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        imageUploader = ImageUploader()
         initializeChat()
         setupClickListeners()
     }
@@ -113,7 +121,9 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun pickImageFromGallery() {
-        val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
+        val intent = Intent(Intent.ACTION_PICK).apply {
+            type = "image/*"
+        }
         startActivityForResult(intent, PICK_IMAGE)
     }
 
@@ -172,21 +182,46 @@ class ChatActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             val uri = data?.data ?: return
-            uploadImage(uri)
+            uploadImageWithCloudinary(uri)
         }
     }
 
-    private fun uploadImage(uri: android.net.Uri) {
+    private fun uploadImageWithCloudinary(uri: Uri) {
         binding.btnImage.isEnabled = false
         Toast.makeText(this, "Uploading image...", Toast.LENGTH_SHORT).show()
 
-        FirebaseHelper.uploadImage(chatId, uri) { url, err ->
-            binding.btnImage.isEnabled = true
-
-            if (url != null) {
-                sendImageMessage(url)
-            } else {
-                Toast.makeText(this, "Upload failed: ${err?.localizedMessage}", Toast.LENGTH_LONG).show()
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                imageUploader.uploadImage(this@ChatActivity, uri).collect { result ->
+                    when (result) {
+                        is ImageUploader.UploadResult.Loading -> {
+                            binding.btnImage.isEnabled = false
+                        }
+                        is ImageUploader.UploadResult.Progress -> {
+                            // Optional: Show progress
+                            // Toast.makeText(this@ChatActivity, "Uploading... ${result.percentage}%", Toast.LENGTH_SHORT).show()
+                        }
+                        is ImageUploader.UploadResult.Success -> {
+                            binding.btnImage.isEnabled = true
+                            sendImageMessage(result.imageUrl)
+                        }
+                        is ImageUploader.UploadResult.Error -> {
+                            binding.btnImage.isEnabled = true
+                            Toast.makeText(
+                                this@ChatActivity,
+                                "Upload failed: ${result.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                binding.btnImage.isEnabled = true
+                Toast.makeText(
+                    this@ChatActivity,
+                    "Upload error: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -198,19 +233,20 @@ class ChatActivity : AppCompatActivity() {
         val msg = Message(
             senderId = uid,
             senderName = senderName,
-            imageUrl = imageUrl,
+            imageUrl = imageUrl, // This is the CHAT image
             timestamp = System.currentTimeMillis()
         )
 
         FirebaseHelper.sendMessage(chatId, msg) { ok, e ->
             if (!ok) {
                 Toast.makeText(this, "Failed to send image: ${e?.localizedMessage}", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Image sent successfully!", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        // Add any custom back press logic here
     }
 }

@@ -40,14 +40,24 @@
                     android:layout_height="36dp"
                     android:layout_marginEnd="6dp"
                     android:scaleType="centerCrop"
-                    android:src="@android:drawable/ic_menu_myplaces"
-                    />
+                    android:src="@android:drawable/ic_menu_myplaces" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <!-- Image message for received -->
+                    <ImageView
+                        android:id="@+id/imageReceived"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/bg_received_message"
+                        android:padding="4dp"
+                        android:visibility="gone" />
+
+                    <!-- Text message for received -->
                     <TextView
                         android:id="@+id/textReceived"
                         android:layout_width="wrap_content"
@@ -57,6 +67,18 @@
                         android:textColor="#FFFFFF"
                         android:textSize="15sp"
                         android:maxWidth="240dp" />
+
+                    <!-- Image caption for received -->
+                    <TextView
+                        android:id="@+id/textCaptionReceived"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_received_message"
+                        android:padding="10dp"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:maxWidth="240dp"
+                        android:visibility="gone" />
 
                     <!-- Timestamp for received message -->
                     <TextView
@@ -97,6 +119,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <!-- Image message for sent -->
+                <ImageView
+                    android:id="@+id/imageSent"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/bg_sent_message"
+                    android:padding="4dp"
+                    android:visibility="gone" />
+
+                <!-- Text message for sent -->
                 <TextView
                     android:id="@+id/textSent"
                     android:layout_width="wrap_content"
@@ -106,6 +139,18 @@
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:maxWidth="240dp" />
+
+                <!-- Image caption for sent -->
+                <TextView
+                    android:id="@+id/textCaptionSent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_sent_message"
+                    android:padding="10dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:maxWidth="240dp"
+                    android:visibility="gone" />
 
                 <!-- Timestamp for sent message -->
                 <TextView

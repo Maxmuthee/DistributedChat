@@ -17,7 +17,44 @@
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="#2196F3"
-        android:layout_marginBottom="48dp" />
+        android:layout_marginBottom="32dp" />
+
+    <!-- Profile Picture Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="24dp">
+
+        <ImageView
+            android:id="@+id/ivProfilePreview"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/bg_received_message"
+            android:src="@android:drawable/ic_menu_gallery"
+            android:contentDescription="Profile picture preview"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap to add profile picture"
+            android:textSize="14sp"
+            android:textColor="#666666" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(Optional)"
+            android:textSize="12sp"
+            android:textColor="#999999"
+            android:layout_marginTop="2dp" />
+
+    </LinearLayout>
 
     <!-- Username Field -->
     <EditText
@@ -73,7 +110,7 @@
         android:textColor="#FFFFFF"
         android:layout_marginBottom="16dp" />
 
-    <!-- Login Link - ADD THE ID HERE -->
+    <!-- Login Link -->
     <TextView
         android:id="@+id/tvLogin"
         android:layout_width="match_parent"

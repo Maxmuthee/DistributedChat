@@ -1,16 +1,13 @@
 package com.example.vybzchat.utils
 
-import android.net.Uri
 import com.example.vybzchat.model.Message
-import com.example.vybzchat.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 
 object FirebaseHelper {
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
     val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    val storage: FirebaseStorage = FirebaseStorage.getInstance()
+    // REMOVED: val storage: FirebaseStorage = FirebaseStorage.getInstance()
 
     fun currentUid(): String? = auth.currentUser?.uid
 
@@ -25,13 +22,6 @@ object FirebaseHelper {
         }
     }
 
-    fun uploadImage(chatId: String, uri: Uri, onComplete: (String?, Exception?) -> Unit) {
-        val fileName = System.currentTimeMillis().toString()
-        val ref = storage.reference.child("chat_images/$chatId/$fileName")
-        ref.putFile(uri).continueWithTask { it.result?.storage?.downloadUrl }
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) onComplete(task.result.toString(), null)
-                else onComplete(null, task.exception)
-            }
-    }
+    // REMOVED: uploadImage function since we're using Cloudinary directly now
+    // The image upload is handled by ImageUploader.kt with Cloudinary
 }

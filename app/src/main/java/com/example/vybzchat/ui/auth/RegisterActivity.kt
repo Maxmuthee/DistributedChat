@@ -1,22 +1,32 @@
 package com.example.vybzchat.ui.auth
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vybzchat.databinding.ActivityRegisterBinding
+import com.example.vybzchat.utils.ImageUploader
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var imageUploader: ImageUploader
+    private var selectedImageUri: Uri? = null
 
     // References to Realtime Database and Firestore
     private val dbRef = FirebaseDatabase.getInstance().getReference("users")
     private val firestore = FirebaseFirestore.getInstance()
+
+    private val PICK_IMAGE_REQUEST = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +34,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
+        imageUploader = ImageUploader()
         setupClickListeners()
     }
 
@@ -32,9 +43,32 @@ class RegisterActivity : AppCompatActivity() {
             attemptRegistration()
         }
 
-        // Add click listener for login link - MAKE SURE THIS IS UNCOMMENTED
+        // Add profile picture selection
+        binding.ivProfilePreview.setOnClickListener {
+            openImagePicker()
+        }
+
+        // Add click listener for login link
         binding.tvLogin.setOnClickListener {
             navigateToLogin()
+        }
+    }
+
+    private fun openImagePicker() {
+        val intent = Intent(Intent.ACTION_PICK).apply {
+            type = "image/*"
+        }
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { uri ->
+                selectedImageUri = uri
+                // Show preview of selected image
+                binding.ivProfilePreview.setImageURI(uri)
+            }
         }
     }
 
@@ -47,7 +81,54 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        registerUser(username, email, password)
+        // Show loading state
+        binding.btnRegister.isEnabled = false
+        binding.btnRegister.text = "Creating Account..."
+
+        // If user selected an image, upload it first, then register
+        if (selectedImageUri != null) {
+            uploadProfilePictureAndRegister(username, email, password)
+        } else {
+            // Register without profile picture
+            registerUser(username, email, password, null)
+        }
+    }
+
+    private fun uploadProfilePictureAndRegister(username: String, email: String, password: String) {
+        val imageUri = selectedImageUri ?: return
+
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                imageUploader.uploadImage(this@RegisterActivity, imageUri).collect { result ->
+                    when (result) {
+                        is ImageUploader.UploadResult.Success -> {
+                            // Profile picture uploaded successfully, now register with the image URL
+                            registerUser(username, email, password, result.imageUrl)
+                        }
+                        is ImageUploader.UploadResult.Error -> {
+                            // Upload failed, register without profile picture
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "Profile picture upload failed, continuing without it",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            registerUser(username, email, password, null)
+                        }
+                        else -> {
+                            // Handle loading/progress states if needed
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                // Upload failed, register without profile picture
+                Toast.makeText(
+                    this@RegisterActivity,
+                    "Profile picture upload failed, continuing without it",
+                    Toast.LENGTH_SHORT
+                ).show()
+                registerUser(username, email, password, null)
+            }
+        }
     }
 
     private fun validateInputs(username: String, email: String, password: String): Boolean {
@@ -90,11 +171,7 @@ class RegisterActivity : AppCompatActivity() {
         return true
     }
 
-    private fun registerUser(username: String, email: String, password: String) {
-        // Show loading state
-        binding.btnRegister.isEnabled = false
-        binding.btnRegister.text = "Creating Account..."
-
+    private fun registerUser(username: String, email: String, password: String, profilePictureUrl: String?) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -102,21 +179,27 @@ class RegisterActivity : AppCompatActivity() {
                         handleRegistrationFailure(Exception("User ID is null"))
                         return@addOnCompleteListener
                     }
-                    saveUserToDatabases(uid, username, email)
+                    saveUserToDatabases(uid, username, email, profilePictureUrl)
                 } else {
                     handleRegistrationFailure(task.exception ?: Exception("Unknown error"))
                 }
             }
     }
 
-    private fun saveUserToDatabases(uid: String, username: String, email: String) {
-        val userData = mapOf(
+    private fun saveUserToDatabases(uid: String, username: String, email: String, profilePictureUrl: String?) {
+        // Create user data with optional profile picture
+        val userData = hashMapOf(
             "uid" to uid,
             "username" to username,
             "email" to email,
             "online" to true,
             "lastSeen" to System.currentTimeMillis()
         )
+
+        // Add profile picture URL if available
+        if (profilePictureUrl != null) {
+            userData["profilePicture"] = profilePictureUrl
+        }
 
         // Save to Realtime Database
         dbRef.child(uid).setValue(userData)
